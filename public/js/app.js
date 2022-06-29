@@ -5256,6 +5256,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
@@ -5303,6 +5304,13 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (e) {
         console.error(e);
       });
+    },
+    trimText: function trimText(text) {
+      if (text.length > 50) {
+        return text.slice(0, 50) + '...';
+      }
+
+      return text;
     }
   },
   mounted: function mounted() {
@@ -42341,7 +42349,13 @@ var render = function () {
                         _c("div", { staticClass: "card-body" }, [
                           _c("h3", [_vm._v(_vm._s(post.title))]),
                           _vm._v(" "),
-                          _c("p", [_vm._v(_vm._s(post.content))]),
+                          _c("p", [_vm._v(_vm._s(_vm.trimText(post.content)))]),
+                          _vm._v(" "),
+                          post.content.length > 50
+                            ? _c("a", { attrs: { href: "" } }, [
+                                _vm._v("Read more"),
+                              ])
+                            : _vm._e(),
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-footer" }, [
@@ -42529,7 +42543,7 @@ var render = function () {
                 _vm._l(_vm.tags, function (tag) {
                   return _c("li", { key: tag.id }, [
                     _vm._v(
-                      "\n              " + _vm._s(tag.name) + "\n            "
+                      "\n              #" + _vm._s(tag.name) + "\n            "
                     ),
                   ])
                 }),

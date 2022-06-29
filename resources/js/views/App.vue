@@ -17,7 +17,8 @@
                     />
                     <div class="card-body">
                       <h3>{{ post.title }}</h3>
-                      <p>{{ post.content }}</p>
+                      <p>{{trimText(post.content)}}</p>
+                      <a href="" v-if="post.content.length > 50">Read more</a>
                     </div>
                     <div class="card-footer">
                       <div class="row">
@@ -110,7 +111,7 @@
             <h5>Tag:</h5>
             <ul>
               <li v-for="tag in tags" :key="tag.id">
-                {{ tag.name }}
+                #{{ tag.name }}
               </li>
             </ul>
           </div>
@@ -170,6 +171,12 @@ export default {
           console.error(e);
         });
     },
+    trimText(text){
+        if (text.length > 50) {
+          return text.slice(0, 50) + '...'
+        }
+        return text;
+    }
   },
   mounted() {
     console.log("mounted");
