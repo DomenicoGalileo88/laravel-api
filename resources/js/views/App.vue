@@ -5,7 +5,7 @@
     <section class="posts">
       <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          <div class="col" v-for="post in posts" :key="post.id">
+          <div class="col" v-for="post in posts.data" :key="post.id">
             <div class="post card">
               <img :src="'storage/' + post.cover_image" :alt="post.title">
               <div class="card-body">
@@ -15,7 +15,7 @@
               <div class="card-footer">
                 <div class="row">
                   <div class="col">
-                    <div class="author">
+                    <div class="author" v-if="post.user">
                       <strong>Author: </strong>
                       {{post.user.name}}
                     </div>
@@ -41,6 +41,26 @@
             </div>
           </div>
         </div>
+
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center pt-5">
+            <li class="page-item" v-if="posts.current_page > 1">
+              <a class="page-link" href="#" aria-label="Previous" @click.prevent='getAllPosts(posts.current_page - 1)'>
+                <span aria-hidden="true">&laquo;</span>
+                <span class="visually-hidden">Previous</span>
+              </a>
+            </li>
+            <li :class="{'page-item' : true, 'active' : page == posts.current_page}" v-for="page in posts.last_page" :key="page">
+              <a class="page-link" href="#" @click='getAllPosts(page)'>{{page}}</a></li>
+            
+            <li class="page-item" v-if="posts.current_page < posts.last_page">
+              <a class="page-link" href="#" aria-label="Next" @click.prevent='getAllPosts(posts.current_page + 1)'>
+                <span aria-hidden="true">&raquo;</span>
+                <span class="visually-hidden">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </section>
   </div>
@@ -56,12 +76,21 @@ export default {
       posts: '',
     }
   },
+  methods: {
+    getAllPosts(postPage){
+      axios.get('/api/posts', {
+        params: {
+          page: postPage,
+        }
+      }).then(response => {
+      console.log(response);
+      this.posts = response.data;
+    })
+    }
+  },
   mounted(){
     console.log('mounted');
-    axios.get('/api/posts').then(response => {
-      console.log(response);
-      this.posts = response.data.data;
-    })
-  }
+    this.getAllPosts(1);
+  },
 }
 </script>

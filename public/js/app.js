@@ -5182,6 +5182,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "App",
@@ -5193,14 +5213,23 @@ __webpack_require__.r(__webpack_exports__);
       posts: ''
     };
   },
-  mounted: function mounted() {
-    var _this = this;
+  methods: {
+    getAllPosts: function getAllPosts(postPage) {
+      var _this = this;
 
+      axios.get('/api/posts', {
+        params: {
+          page: postPage
+        }
+      }).then(function (response) {
+        console.log(response);
+        _this.posts = response.data;
+      });
+    }
+  },
+  mounted: function mounted() {
     console.log('mounted');
-    axios.get('/api/posts').then(function (response) {
-      console.log(response);
-      _this.posts = response.data.data;
-    });
+    this.getAllPosts(1);
   }
 });
 
@@ -41518,7 +41547,7 @@ var render = function () {
           _c(
             "div",
             { staticClass: "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" },
-            _vm._l(_vm.posts, function (post) {
+            _vm._l(_vm.posts.data, function (post) {
               return _c("div", { key: post.id, staticClass: "col" }, [
                 _c("div", { staticClass: "post card" }, [
                   _c("img", {
@@ -41537,14 +41566,16 @@ var render = function () {
                   _c("div", { staticClass: "card-footer" }, [
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "col" }, [
-                        _c("div", { staticClass: "author" }, [
-                          _c("strong", [_vm._v("Author: ")]),
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(post.user.name) +
-                              "\n                  "
-                          ),
-                        ]),
+                        post.user
+                          ? _c("div", { staticClass: "author" }, [
+                              _c("strong", [_vm._v("Author: ")]),
+                              _vm._v(
+                                "\n                    " +
+                                  _vm._s(post.user.name) +
+                                  "\n                  "
+                              ),
+                            ])
+                          : _vm._e(),
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col" }, [
@@ -41586,6 +41617,97 @@ var render = function () {
             }),
             0
           ),
+          _vm._v(" "),
+          _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
+            _c(
+              "ul",
+              { staticClass: "pagination justify-content-center pt-5" },
+              [
+                _vm.posts.current_page > 1
+                  ? _c("li", { staticClass: "page-item" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "page-link",
+                          attrs: { href: "#", "aria-label": "Previous" },
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.getAllPosts(_vm.posts.current_page - 1)
+                            },
+                          },
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("«"),
+                          ]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "visually-hidden" }, [
+                            _vm._v("Previous"),
+                          ]),
+                        ]
+                      ),
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.posts.last_page, function (page) {
+                  return _c(
+                    "li",
+                    {
+                      key: page,
+                      class: {
+                        "page-item": true,
+                        active: page == _vm.posts.current_page,
+                      },
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "page-link",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.getAllPosts(page)
+                            },
+                          },
+                        },
+                        [_vm._v(_vm._s(page))]
+                      ),
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _vm.posts.current_page < _vm.posts.last_page
+                  ? _c("li", { staticClass: "page-item" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "page-link",
+                          attrs: { href: "#", "aria-label": "Next" },
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.getAllPosts(_vm.posts.current_page + 1)
+                            },
+                          },
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("»"),
+                          ]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "visually-hidden" }, [
+                            _vm._v("Next"),
+                          ]),
+                        ]
+                      ),
+                    ])
+                  : _vm._e(),
+              ],
+              2
+            ),
+          ]),
         ]),
       ]),
     ],
