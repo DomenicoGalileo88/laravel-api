@@ -1,6 +1,6 @@
 <template>
   <div>
-    <WorkInProgress/>
+    <SiteJumbotron/>
 
     <section class="posts">
       <div class="container">
@@ -67,10 +67,10 @@
 </template>
 
 <script>
-import WorkInProgress from '../components/WorkInProgress';
+import SiteJumbotron from '../components/SiteJumbotron';
 export default {
   name: "App",
-  components: {WorkInProgress},
+  components: {SiteJumbotron},
   data(){
     return{
       posts: '',
@@ -94,3 +94,7 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+
+</style>

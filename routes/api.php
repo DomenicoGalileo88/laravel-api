@@ -19,9 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('posts', function ()
-{
-   $posts = Post::with('category', 'tags', 'user')->paginate(6); 
-
-   return $posts;
-});
+Route::get('posts', 'API\PostController@index');
