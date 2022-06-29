@@ -2,7 +2,10 @@
   <div>
     <SiteJumbotron/>
 
-    <section class="posts">
+    <div class="container-fluid">
+      <div class="row">
+        <main class="col-12 col-md-9 col-lg-10">
+      <section class="posts">
       <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           <div class="col" v-for="post in posts.data" :key="post.id">
@@ -27,11 +30,11 @@
                       {{post.category.name}}
                     </span>
 
-                    <div class="tags" v-if="post.tags.length > 0">
+                    <div class="card_tags" v-if="post.tags.length > 0">
                       <strong>Tags: </strong>
-                      <ul>
+                      <ul class="d-flex">
                         <li v-for="tag in post.tags" :key="tag.id">
-                          {{tag.name}}
+                          #{{tag.name}}  
                         </li>
                       </ul>
                     </div>
@@ -63,6 +66,30 @@
         </nav>
       </div>
     </section>
+    </main>
+    <!-- /.col-12 col-md-9 col-lg-10 -->
+
+    <aside class="col-12 col-md-3 col-lg-2">
+      <div class="categories">
+        <h5>Category: </h5>
+        <ul>
+          <li v-for="category in categories" :key="category.id">
+              {{category.name}}
+          </li>
+        </ul>
+      </div>
+
+      <div class="tags">
+        <h5>Tag: </h5>
+        <ul>
+          <li v-for="tag in tags" :key="tag.id">
+              {{tag.name}}
+          </li>
+        </ul>
+      </div>
+    </aside>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +101,8 @@ export default {
   data(){
     return{
       posts: '',
+      categories: '',
+      tags: '',
     }
   },
   methods: {
@@ -85,16 +114,55 @@ export default {
       }).then(response => {
       console.log(response);
       this.posts = response.data;
+    }).catch(e => {
+      console.error(e);
+    })
+    },
+    getAllCategories(){
+      axios.get('/api/categories', {
+      }).then(response => {
+      console.log(response);
+      this.categories = response.data;
+    }).catch(e => {
+      console.error(e);
+    })
+    },
+    getAllTags(){
+      axios.get('/api/tags', {
+      }).then(response => {
+      console.log(response);
+      this.tags = response.data;
+    }).catch(e => {
+      console.error(e);
     })
     }
   },
   mounted(){
     console.log('mounted');
     this.getAllPosts(1);
+    this.getAllCategories();
+    this.getAllTags();
   },
 }
 </script>
 
 <style lang="scss">
+.card_tags{
+  li{
+    list-style: none;
+  }
+}
 
+.categories, .tags{
+  background-color: #00000020;
+  border-radius: 1rem;
+  padding: 1rem;
+  li{
+    list-style: none;
+  }
+}
+
+.tags{
+  margin-top: 1rem;
+}
 </style>
